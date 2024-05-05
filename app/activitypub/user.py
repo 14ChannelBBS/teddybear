@@ -27,8 +27,8 @@ async def webfinger(id: str):
         "outbox": f"https://{Config.serverAddress}/users/{row['id']}/outbox",
         "preferredUsername": row['username'],
         "publicKey": {
-            "id": f"https://{Config.serverAddress}/@{row['username']}#main-key",
-            "owner": f"https://{Config.serverAddress}/@{row['username']}",
+            "id": f"https://{Config.serverAddress}/users/{row['id']}#main-key",
+            "owner": f"https://{Config.serverAddress}/users/{row['id']}",
             "publicKeyPem": row['publicKeyPem'],
             "type": "Key"
         },
