@@ -7,7 +7,7 @@ import re
 
 router = APIRouter()
 
-@router.get("/.well-known/webfinger", response_class=JSONResponse, media_type="application/activity+json")
+@router.get("/.well-known/webfinger")
 async def webfinger(resource: str = ""):
     match = re.search(r"acct:(.*?)@(.*?)$", resource)
 
@@ -18,7 +18,7 @@ async def webfinger(resource: str = ""):
         if domain == Config.serverAddress:
             connection = await asyncpg.connect(os.getenv("dsn"))
             row = await connection.fetchrow('SELECT * FROM users WHERE username = $1', username)
-            return {
+            body = {
                 "subject": resource,
                 "links": [
                     {
@@ -28,6 +28,7 @@ async def webfinger(resource: str = ""):
                     }
                 ]
             }
+            return JSONResponse(body, headers={"Content-Type": "application/activity+json"})
         else:
             raise HTTPException(status_code=404)
     else:

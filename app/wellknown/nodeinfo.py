@@ -4,7 +4,7 @@ from ..config import Config
 
 router = APIRouter()
 
-@router.get("/.well-known/nodeinfo", response_class=JSONResponse, media_type="application/activity+json")
+@router.get("/.well-known/nodeinfo")
 async def nodeinfo():
 	return {
 		"links": [

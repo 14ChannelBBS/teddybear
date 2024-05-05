@@ -6,12 +6,12 @@ import os
 
 router = APIRouter()
 
-@router.get("/users/{id}", response_class=JSONResponse, media_type="application/activity+json")
+@router.get("/users/{id}")
 async def webfinger(id: str):
     connection = await asyncpg.connect(os.getenv("dsn"))
     row = await connection.fetchrow('SELECT * FROM users WHERE id = $1', id)
 
-    return {
+    body = {
         "@context": [
             "https://www.w3.org/ns/activitystreams",
             "https://w3id.org/security/v1"
@@ -37,3 +37,4 @@ async def webfinger(id: str):
         "type": "Person",
         "url": f"https://{Config.serverAddress}/@{row['username']}"
     }
+    return JSONResponse(body, headers={"Content-Type": "application/activity+json"})
