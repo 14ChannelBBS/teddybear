@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from ...config import Config
+from ..config import Config
 
 router = APIRouter()
 

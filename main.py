@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from .app.api import registration
-from .app.wellknown import nodeinfo
+from app.api import registration
+from app.wellknown import nodeinfo
 
 app = FastAPI()
 
