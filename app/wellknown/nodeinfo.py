@@ -1,9 +1,10 @@
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 from ..config import Config
 
 router = APIRouter()
 
-@router.get("/.well-known/nodeinfo")
+@router.get("/.well-known/nodeinfo", response_class=JSONResponse, media_type="application/activity+json")
 async def nodeinfo():
 	return {
 		"links": [

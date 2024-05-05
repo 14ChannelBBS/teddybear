@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from ..config import Config
 import asyncpg
 import os
@@ -6,7 +7,7 @@ import re
 
 router = APIRouter()
 
-@router.get("/.well-known/webfinger")
+@router.get("/.well-known/webfinger", response_class=JSONResponse, media_type="application/activity+json")
 async def webfinger(resource: str = ""):
     match = re.search(r"acct:(.*?)@(.*?)$", resource)
 
