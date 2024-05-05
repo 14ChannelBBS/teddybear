@@ -3,3 +3,4 @@ python-socketio
 aiohttp
 asyncpg
 validate_email
+uvicorn
