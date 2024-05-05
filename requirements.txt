@@ -5,3 +5,4 @@ asyncpg
 validate_email
 uvicorn
 cryptography
+bcrypt
