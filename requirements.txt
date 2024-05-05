@@ -4,3 +4,4 @@ aiohttp
 asyncpg
 validate_email
 uvicorn
+cryptography
