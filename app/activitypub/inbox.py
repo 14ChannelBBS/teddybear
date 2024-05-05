@@ -6,7 +6,7 @@ import os
 
 router = APIRouter()
 
-@router.get("/users/{id}/inbox")
+@router.post("/users/{id}/inbox")
 async def inbox(request: Request, id: str):
     if request.headers.get("Content-Type", "") != 'application/activity+json':
         raise HTTPException(status_code=400)
