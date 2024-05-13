@@ -24,6 +24,7 @@ async def task():
                 header, body, path, id = await pqueue.get()
 
                 log.info(body)
+                log.info(f'Type: {body.get("type", "")}')
                 if body.get("type", "") == "Follow":
                     await followTask(header, body, path, id)
         except Exception as e:
