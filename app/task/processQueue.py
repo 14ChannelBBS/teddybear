@@ -25,7 +25,7 @@ async def task():
                     await followTask(header, body, path, id)
         except Exception as e:
             traceback.print_exception(e)
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.01)
     return
 
 async def followTask(header, body, path, id):
@@ -43,7 +43,7 @@ async def followTask(header, body, path, id):
     if userdata["publicKey"]["owner"] == body.get("actor"):
         if userdata["publicKey"]["type"] == "Key":
             public_key_str = userdata["publicKey"]["publicKeyPem"]
-            pubBytes = bytes(public_key_str)
+            pubBytes = bytes(public_key_str.encode("UTF-8"))
             n = int.from_bytes(pubBytes[8:8+128], 'big')
             e = int.from_bytes(pubBytes[8+128:], 'big')
             pubKey = rsa.PublicKey(**{'e': e, 'n': n})

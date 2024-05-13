@@ -17,5 +17,5 @@ async def task():
                 await func
         except Exception as e:
             traceback.print_exception(e)
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.01)
     return
