@@ -8,6 +8,7 @@ from ..config import Config
 import logging
 import base64
 import traceback
+import rsa
 
 log = logging.getLogger("uvicorn")
 pqueue = asyncio.Queue()
@@ -42,11 +43,11 @@ async def followTask(header, body, path, id):
     if userdata["publicKey"]["owner"] == body.get("actor"):
         if userdata["publicKey"]["type"] == "Key":
             public_key_str = userdata["publicKey"]["publicKeyPem"]
-            padding_needed = len(public_key_str) % 4
-            if padding_needed:
-                public_key_str += '=' * (4 - padding_needed)
-            public_key_bytes = base64.b64decode(public_key_str.encode())
-            public_key = bytearray(public_key_bytes)
+            pubBytes = bytes(public_key_str)
+            n = int.from_bytes(pubBytes[8:8+128], 'big')
+            e = int.from_bytes(pubBytes[8+128:], 'big')
+            pubKey = rsa.PublicKey(**{'e': e, 'n': n})
+            public_key = pubKey.save_pkcs1().decode()
         else:
             Exception("publicKey type is not Key")
     else:
