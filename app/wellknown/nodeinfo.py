@@ -19,7 +19,7 @@ async def nodeinfo():
 		]
 	}
 
-@router.get("/.well-known/nodeinfo/2.1")
+@router.get("/nodeinfo/2.1")
 async def nodeinfo():
 	return {
 		"version": "2.1",
@@ -76,7 +76,7 @@ async def nodeinfo():
 		}
 	}
 
-@router.get("/.well-known/nodeinfo/2.0")
+@router.get("/nodeinfo/2.0")
 async def nodeinfo():
 	return {
 		"version": "2.1",
