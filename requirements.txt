@@ -7,3 +7,4 @@ uvicorn
 cryptography
 bcrypt
 httpsig
+rsa
