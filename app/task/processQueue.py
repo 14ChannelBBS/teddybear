@@ -6,6 +6,7 @@ import os
 from . import deliverQueue
 from ..config import Config
 import logging
+import base64
 
 log = logging.getLogger("uvicorn")
 pqueue = asyncio.Queue()
@@ -36,7 +37,9 @@ async def followTask(header, body, path, id):
 
     if userdata["publicKey"]["owner"] == body.get("actor"):
         if userdata["publicKey"]["type"] == "Key":
-            public_key = userdata["publicKey"]["publicKeyPem"]
+            public_key_str = userdata["publicKey"]["publicKeyPem"]
+            public_key_bytes = base64.b64decode(public_key_str.encode())
+            public_key = bytearray(public_key_bytes)
         else:
             Exception("publicKey type is not Key")
     else:
