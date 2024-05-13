@@ -56,6 +56,8 @@ async def followTask(header, body, path, id):
         ''', id, mydata["followers"])
         await connection.close()
 
+        log.info(f'{body.get("actor")} followed {mydata["username"]}.')
+
         await deliverQueue.dqueue.put(
             follow_accept(header, body, path, id, userdata, mydata)
         )
@@ -76,3 +78,5 @@ async def follow_accept(header, body, path, id, userdata, mydata):
         async with session.get(body.get("actor"), headers=headers, json=data) as response:
             if response.code >= 400 and response.code < 600:
                 log.error("follow accept error...")
+            else:
+                log.info(f'accepted!')

@@ -14,11 +14,13 @@ log.info(f"Teddybear v{Config.softwareVersion} is loading...")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    log.info("registring tasks...")
     loop = asyncio.get_running_loop()
     pool = ThreadPoolExecutor(max_workers=20)
     future = loop.run_in_executor(pool, lambda: asyncio.run(deliverQueue.task()))
     future2 = loop.run_in_executor(pool, lambda: asyncio.run(processQueue.task()))
     yield
+    log.info("exiting tasks...")
     deliverQueue.can = False
     processQueue.can = False
     pool.shutdown()
