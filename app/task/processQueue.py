@@ -9,16 +9,18 @@ import logging
 
 log = logging.getLogger("uvicorn")
 pqueue = asyncio.Queue()
+can = True
 
 async def task():
-    while True:
-        if pqueue.qsize > 0:
+    log.info("processQueue task started.")
+    while can:
+        if pqueue.qsize() > 0:
             header, body, path, id = await pqueue.get()
 
             if body.get("type", "") == "Follow":
                 await followTask(header, body, path, id)
-
         await asyncio.sleep(1)
+    return
 
 async def followTask(header, body, path, id):
     headers = {
