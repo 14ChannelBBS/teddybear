@@ -43,7 +43,7 @@ async def followTask(header, body, path, id):
 
     if userdata["publicKey"]["owner"] == body.get("actor"):
         public_key_str = userdata["publicKey"]["publicKeyPem"]
-        pubKey = load_pem_public_key(public_key_str, backend=default_backend())
+        pubKey = load_pem_public_key(public_key_str.encode('utf-8'), backend=default_backend())
         public_key = pubKey.public_bytes_raw()
     else:
         Exception("publicKey error")
