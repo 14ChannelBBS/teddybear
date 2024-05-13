@@ -6,9 +6,10 @@ import os
 from . import deliverQueue
 from ..config import Config
 import logging
-import base64
 import traceback
-import rsa
+from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.serialization import load_pem_public_key
 
 log = logging.getLogger("uvicorn")
 pqueue = asyncio.Queue()
@@ -43,11 +44,8 @@ async def followTask(header, body, path, id):
     if userdata["publicKey"]["owner"] == body.get("actor"):
         if userdata["publicKey"]["type"] == "Key":
             public_key_str = userdata["publicKey"]["publicKeyPem"]
-            pubBytes = bytes(public_key_str.encode("UTF-8"))
-            n = int.from_bytes(pubBytes[8:8+128], 'big')
-            e = int.from_bytes(pubBytes[8+128:], 'big')
-            pubKey = rsa.PublicKey(**{'e': e, 'n': n})
-            public_key = pubKey.save_pkcs1().decode()
+            pubKey = load_pem_public_key(public_key_str, backend=default_backend())
+            public_key = pubKey.public_bytes_raw()
         else:
             Exception("publicKey type is not Key")
     else:
