@@ -8,6 +8,7 @@ from app.task import deliverQueue, processQueue
 import asyncio
 from contextlib import asynccontextmanager
 from concurrent.futures import Executor, ThreadPoolExecutor
+from app.frontends import index
 
 log = logging.getLogger("uvicorn")
 log.info(f"Teddybear v{Config.softwareVersion} is loading...")
@@ -33,5 +34,6 @@ app.include_router(nodeinfo.router)
 app.include_router(webfinger.router)
 app.include_router(user.router)
 app.include_router(inbox.router)
+app.include_router(index.router)
 
 log.info(f"""Teddybear v{Config.softwareVersion} load successful!""")

@@ -38,7 +38,7 @@ class Config():
     privacyPolicyUrl: str = f"https://{serverAddress}/mod/privacy"
     impressumUrl: str = "https://nennneko5787.cloudfree.jp/"
 
-    disableRegistration: bool = False
+    disableRegistration: bool = True
     disableLocalTimeline: bool = False
     disableGlobalTimeline: bool = False
     emailRequiredForSignup: bool = False
