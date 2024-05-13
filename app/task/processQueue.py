@@ -7,6 +7,7 @@ from . import deliverQueue
 from ..config import Config
 import logging
 import base64
+import traceback
 
 log = logging.getLogger("uvicorn")
 pqueue = asyncio.Queue()
@@ -15,11 +16,14 @@ can = True
 async def task():
     log.info("processQueue task started.")
     while can:
-        if pqueue.qsize() > 0:
-            header, body, path, id = await pqueue.get()
+        try:
+            if pqueue.qsize() > 0:
+                header, body, path, id = await pqueue.get()
 
-            if body.get("type", "") == "Follow":
-                await followTask(header, body, path, id)
+                if body.get("type", "") == "Follow":
+                    await followTask(header, body, path, id)
+        except Exception as e:
+            traceback.print_exception(e)
         await asyncio.sleep(1)
     return
 
@@ -38,6 +42,9 @@ async def followTask(header, body, path, id):
     if userdata["publicKey"]["owner"] == body.get("actor"):
         if userdata["publicKey"]["type"] == "Key":
             public_key_str = userdata["publicKey"]["publicKeyPem"]
+            padding_needed = len(public_key_str) % 4
+            if padding_needed:
+                public_key_str += '=' * (4 - padding_needed)
             public_key_bytes = base64.b64decode(public_key_str.encode())
             public_key = bytearray(public_key_bytes)
         else:

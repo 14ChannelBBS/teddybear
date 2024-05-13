@@ -1,6 +1,7 @@
 import asyncio
 import aiohttp
 import logging
+import traceback
 
 log = logging.getLogger("uvicorn")
 
@@ -10,8 +11,11 @@ can = True
 async def task():
     log.info("deliverQueue task started.")
     while can:
-        if dqueue.qsize() > 0:
-            func = await dqueue.get()
-            await func
+        try:
+            if dqueue.qsize() > 0:
+                func = await dqueue.get()
+                await func
+        except Exception as e:
+            traceback.print_exception(e)
         await asyncio.sleep(1)
     return
