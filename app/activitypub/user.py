@@ -8,9 +8,6 @@ router = APIRouter()
 
 @router.get("/users/{id}")
 async def webfinger(request: Request, id: str):
-    if request.headers.get("Content-Type", "") != 'application/activity+json':
-        raise HTTPException(status_code=400)
-
     connection = await asyncpg.connect(os.getenv("dsn"))
     row = await connection.fetchrow('SELECT * FROM users WHERE id = $1', id)
     await connection.close()
