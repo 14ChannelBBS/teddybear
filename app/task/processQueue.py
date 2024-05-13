@@ -9,6 +9,7 @@ import logging
 import traceback
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 
 log = logging.getLogger("uvicorn")
@@ -44,7 +45,10 @@ async def followTask(header, body, path, id):
     if userdata["publicKey"]["owner"] == body.get("actor"):
         public_key_str = userdata["publicKey"]["publicKeyPem"]
         pubKey = load_pem_public_key(public_key_str.encode('utf-8'), backend=default_backend())
-        public_key = pubKey.public_bytes_raw()
+        public_key = pubKey.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
     else:
         Exception("publicKey error")
 
