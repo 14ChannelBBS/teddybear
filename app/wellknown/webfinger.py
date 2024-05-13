@@ -18,6 +18,7 @@ async def webfinger(resource: str = ""):
         if domain == Config.serverAddress:
             connection = await asyncpg.connect(os.getenv("dsn"))
             row = await connection.fetchrow('SELECT * FROM users WHERE username = $1', username)
+            await connection.close()
             body = {
                 "subject": resource,
                 "links": [
@@ -25,6 +26,10 @@ async def webfinger(resource: str = ""):
                         "rel": "self",
                         "type": "application/activity+json",
                         "href": f"https://{Config.serverAddress}/users/{row['id']}"
+                    },
+                    {
+                        "rel": "http://ostatus.org/schema/1.0/subscribe",
+                        "template": f"https://{Config.serverAddress}/authorize-follow?acct={{uri}}"
                     }
                 ]
             }

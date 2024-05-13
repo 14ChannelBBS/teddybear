@@ -13,6 +13,7 @@ async def webfinger(request: Request, id: str):
 
     connection = await asyncpg.connect(os.getenv("dsn"))
     row = await connection.fetchrow('SELECT * FROM users WHERE id = $1', id)
+    await connection.close()
 
     body = {
         "@context": [
