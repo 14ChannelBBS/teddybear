@@ -26,6 +26,7 @@ async def task():
                 log.info(body)
                 log.info(f'Type: {body.get("type", "")}')
                 if body.get("type", "") == "Follow":
+                    log.info(f'Run Follow task')
                     await followTask(header, body, path, id)
         except Exception as e:
             traceback.print_exception(e)
