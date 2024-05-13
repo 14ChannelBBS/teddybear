@@ -4,7 +4,9 @@ from ..config import Config
 from ..task import processQueue
 import asyncpg
 import os
+import logging
 
+log = logging.getLogger("uvicorn")
 router = APIRouter()
 
 @router.post("/users/{id}/inbox")
@@ -16,6 +18,7 @@ async def inbox(request: Request, id: str):
     if type(data) != dict or 'type' not in data:
         return HTTPException(status=400)
     
+    log.info(f"inbox new: {data}")
     await processQueue.pqueue.put(
         (request.headers, data, f"/users/{id}/inbox", id)
     )
