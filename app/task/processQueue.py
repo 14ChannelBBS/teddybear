@@ -28,7 +28,6 @@ async def task():
                     await followTask(header, body, path, id)
         except Exception as e:
             traceback.print_exception(e)
-        await asyncio.sleep(0.01)
     return
 
 async def followTask(header, body, path, id):
