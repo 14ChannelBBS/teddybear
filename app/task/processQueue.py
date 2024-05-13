@@ -42,12 +42,9 @@ async def followTask(header, body, path, id):
                 Exception("This fediverse user not found")
 
     if userdata["publicKey"]["owner"] == body.get("actor"):
-        if userdata["publicKey"]["type"] == "Key":
-            public_key_str = userdata["publicKey"]["publicKeyPem"]
-            pubKey = load_pem_public_key(public_key_str, backend=default_backend())
-            public_key = pubKey.public_bytes_raw()
-        else:
-            Exception("publicKey type is not Key")
+        public_key_str = userdata["publicKey"]["publicKeyPem"]
+        pubKey = load_pem_public_key(public_key_str, backend=default_backend())
+        public_key = pubKey.public_bytes_raw()
     else:
         Exception("publicKey error")
 
