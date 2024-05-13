@@ -41,7 +41,7 @@ async def followTask(header, body, path, id):
             if response.status == 200:
                 userdata = await response.json()
             else:
-                Exception("This fediverse user not found")
+                log.error(f'This fediverse user not found')
 
     if userdata["publicKey"]["owner"] == body.get("actor"):
         public_key_str = userdata["publicKey"]["publicKeyPem"]
@@ -51,7 +51,7 @@ async def followTask(header, body, path, id):
             format=serialization.PublicFormat.SubjectPublicKeyInfo
         )
     else:
-        Exception("publicKey error")
+        log.error(f'publickey error')
 
     if verify_signature(header['signature'], "POST", path, header, public_key):
         connection = await asyncpg.connect(os.getenv("dsn"))
@@ -70,7 +70,7 @@ async def followTask(header, body, path, id):
             follow_accept(header, body, path, id, userdata, mydata)
         )
     else:
-        Exception("signature verify error")
+        log.error(f'signature verify error')
 
 async def follow_accept(header, body, path, id, userdata, mydata):
     headers = sign_headers(mydata, "POST", f"/u/{id}")
