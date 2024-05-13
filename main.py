@@ -16,7 +16,9 @@ app.include_router(nodeinfo.router)
 app.include_router(webfinger.router)
 app.include_router(user.router)
 app.include_router(inbox.router)
-BackgroundTasks.add_task(func=deliverQueue.task)
-BackgroundTasks.add_task(func=processQueue.task)
+
+tasks = BackgroundTasks()
+tasks.add_task(deliverQueue.task)
+tasks.add_task(processQueue.task)
 
 log.info(f"""Teddybear v{Config.softwareVersion} load successful!""")
