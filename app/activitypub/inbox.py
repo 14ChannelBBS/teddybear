@@ -9,7 +9,7 @@ import logging
 log = logging.getLogger("uvicorn")
 router = APIRouter()
 
-@router.post("/users/{id}/inbox", response_class=JSONResponse(media_type="application/activity+json"))
+@router.post("/users/{id}/inbox")
 async def inbox(request: Request, id: str):
     if request.headers.get("Content-Type", "") != 'application/activity+json':
         raise HTTPException(status_code=400)
